@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Trash Annotation App</title>
+  <style>
+    #submit-button {
+     
+      margin: auto;
+      /* auto margins are applied */
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 30px;
+      height: 2rem;
+    }
+
+    .customfile {
+    
+      border: 2px solid rgb(76, 215, 234);
+      border-radius: 50px;
+      padding: 2px;
+      font-size: 20px;
+      /* font-size was incorrect previously */
+      background-image: radial-gradient(circle, #553c9a, #ee4b2b);
+      font-family: "sans-serif";
+      margin: auto;
+      /* auto margins are applied */
+      display: block;
+      max-width: max-content;
+      /* set to block for auto margins to work */
+    }
+
+    .customfile::-webkit-file-upload-button {
+      font-family: "sans-serif";
+      background-color: rgb(227, 221, 221);
+      color: #ffffff;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      color: black;
+    }
+
+    body {
+      color: white;
+      width: 100vw;
+      height: 100vh;
+      text-shadow: 8px 8px 10px #0000008c;
+      background-color: #343a40;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%239C92AC' fill-opacity='0.25' fill-rule='nonzero'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+        linear-gradient(to right top,
+          #151314,
+          #151314,
+          #151314,
+          #151314,
+          #151314);
+    }
+
+    header h1 {
+   
+      font-size: 65px;
+      font-weight: 600;
+      background-image: conic-gradient(#c7ed3d 0%,
+          #c2ccbb 33%,
+          #ee4b2b 33%,
+          #ee4b2b 66%,
+          #00c2cb 66%,
+          #00c2cb 99%);
+      color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text;
+      text-align: center;
+    }
+
+    .buttons-container {
+     
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      /* This is to add some space between the buttons. */
+    }
+
+    .button-36 {
+      /* existing styles here... */
+      background-image: linear-gradient(92.88deg,
+          #455eb5 9.16%,
+          #5643cc 43.89%,
+          #673fd7 64.72%);
+      border-radius: 8px;
+      border-style: none;
+      box-sizing: border-box;
+      color: #ffffff;
+      cursor: pointer;
+      flex-shrink: 0;
+      font-family: "Inter UI", "SF Pro Display", -apple-system,
+        BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+        "Open Sans", "Helvetica Neue", sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      height: 3rem;
+      padding: 0 2rem;
+      text-align: center;
+      text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+      transition: all 0.5s;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+
+      /* Add the following line to center text vertically: */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transform: scale(1);
+      transition: transform 0.1s ease;
+    }
+    .button-36:active {
+      transform: scale(0.9);
+    }
+
+    .button-36:hover {
+      box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
+      transition-duration: 0.1s;
+    }
+
+    @media (min-width: 768px) {
+      .button-36 {
+        padding: 0 2.6rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .button-36 {
+        font-size: 12px;
+        padding: 0 1rem;
+        height: 2rem;
+      }
+    }
+
+    .loader {
+      border: 16px solid #f3f3f3;
+      /* Light grey */
+      border-top: 16px solid #3498db;
+      /* Blue */
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+      display: none;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      /* Hidden by default */
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading-status {
+      text-align: center;
+      font-size: 30px;
+    }
+
+    #drop-down {
+      margin: auto;
+      height: 2rem;
+      width: 13rem;
+    }
+
+    .drop-down-content {
+      color: black;
+      text-align: center;
+      border-bottom: 1px solid black;
+    }
+
+    #finalize {
+      margin: auto;
+      height: 2rem;
+      width: 7rem;
+      margin-left: 2px;
+    }
+
+    @keyframes slideDown {
+      0% {
+        transform: translateY(-100%);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="buttons-container">
+    <a class="button-36" href="./">Home</a>
+    <a class="button-36" href="./csv/">CSV</a>
+    <a class="button-36" href="./overlap/">Duplicates</a>
+    <a class="button-36" href="./map/">Map</a>
+    <a class="button-36" href="./plots/">Plot</a>
+    <a class="button-36" href="./about/">About</a>
+  </nav>
+  <header>
+    <h1>Trash Annotation App</h1>
+  </header>
+
+  <input class="customfile" type="file" id="image-selector" multiple />
+  <button class="button-36" id="submit-button">Submit</button>
+
+  <div style="margin: 10px 0"></div>
+
+  <!-- Add the loader here -->
+  <div class="loader" id="loader"></div>
+  <!-- Add status text here -->
+  <div class="loading-status" id="loading-status"></div>
+
+  <div id="results"></div>
+
+  <script>
+    const submitButton = document.getElementById("submit-button");
+    const resultsDiv = document.getElementById("results");
+    const loader = document.getElementById("loader");
+    const loadingStatus = document.getElementById("loading-status");
+
+    submitButton
+      .addEventListener("click", () => {
+        const imageInput = document.getElementById("image-selector");
+        const formData = new FormData();
+
+        let totalFiles = imageInput.files.length;
+        if (totalFiles === 0) {
+          return;
+        }
+
+        // Show loader
+        loader.style.display = "block";
+        loadingStatus.textContent = `Processing ${totalFiles} Image(s)`;
+
+        for (let i = 0; i < totalFiles; i++) {
+          formData.append("img_directory", imageInput.files[i]);
+        }
+
+        fetch("/process_images", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Hide loader
+            loader.style.display = "none";
+
+            resultsDiv.innerHTML = ""; // clear previous results
+
+            data.predicted_classes.forEach((row, i) => {
+              const div = document.createElement("div");
+              div.style.display = "grid"; // Set div as a grid container
+              div.style.gridTemplateColumns = "1fr 1fr 1fr"; // Divide the container into 3 equal parts
+              div.style.alignItems = "center"; // Vertically center the contents
+              div.style.justifyItems = "center"; // Horizontally center the contents
+              div.style.marginTop = "10px"; // Add space between divs
+
+              const p = document.createElement("p");
+              p.textContent = row[0] + ", " + row[1] + ", " + row[2];
+              div.appendChild(p); // Add the paragraph to the div
+
+              const img = document.createElement("img");
+              img.src = "data:image/jpg;base64," + data.crops[i];
+              img.width = 100;
+              div.appendChild(img); // Add the image to the div
+
+              const actionDiv = document.createElement("div");
+              actionDiv.style.display = "flex"; // Set actionDiv as a flex container
+              actionDiv.style.justifyContent = "center"; // Horizontally center the contents
+
+              const select = document.createElement("select");
+              select.className = "button-36";
+              select.id = "drop-down";
+              const classes = [
+                "plastic",
+                "cage",
+                "wood",
+                "fishing gear",
+                "nature",
+                "metal",
+                "wheel",
+                "repeated trash",
+              ]; // List of classes
+              classes.forEach((cls) => {
+                const option = document.createElement("option");
+                option.text = cls;
+                option.value = cls;
+                option.className = "drop-down-content";
+                if (cls === row[2]) {
+                  option.selected = true;
+                }
+                select.appendChild(option);
+              });
+
+              const button = document.createElement("button");
+              button.className = "button-36";
+              button.id = "finalize";
+              button.textContent = "Revise";
+              button.addEventListener("click", () => {
+                fetch(`/update_class?index=${i}&new_class=${select.value}`)
+                  .then((response) => response.json())
+                  .then((data) => {
+                    // Do something with the data
+                    console.log(data);
+                  });
+              });
+
+              // Add the select and button to the actionDiv
+              actionDiv.appendChild(select);
+              actionDiv.appendChild(button);
+
+              div.appendChild(actionDiv); // Add the actionDiv to the div
+
+              resultsDiv.appendChild(div);
+            });
+          });
+
+        // Clear status text when all done
+        loadingStatus.textContent = "";
+      })
+      .catch((error) => {
+        // Hide loader in case of error
+        loader.style.display = "none";
+        // Clear status text in case of error
+        loadingStatus.textContent = "";
+      });
+  </script>
+</body>
+
+</html>

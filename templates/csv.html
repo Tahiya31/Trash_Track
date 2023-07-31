@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+  <style>
+    header h1 {
+
+      font-size: 65px;
+      font-weight: 600;
+      background-image: linear-gradient(to right, #1ba556 45%, #ffffff);
+      color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text;
+      text-align: center;
+    }
+
+    body {
+      color: white;
+      width: 100vw;
+      height: 100vh;
+      text-shadow: 8px 8px 10px #0000008c;
+      background-color: #343a40;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%239C92AC' fill-opacity='0.25' fill-rule='nonzero'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+        linear-gradient(
+          to right top,
+          #151314,
+          #151314,
+          #151314,
+          #151314,
+          #151314
+        );
+    }
+
+    .buttons-container {
+     
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      /* This is to add some space between the buttons. */
+    }
+
+    .button-36 {
+      /* existing styles here... */
+      background-image: linear-gradient(
+        92.88deg,
+        #455eb5 9.16%,
+        #5643cc 43.89%,
+        #673fd7 64.72%
+      );
+      border-radius: 8px;
+      border-style: none;
+      box-sizing: border-box;
+      color: #ffffff;
+      cursor: pointer;
+      flex-shrink: 0;
+      font-family: "Inter UI", "SF Pro Display", -apple-system,
+        BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+        "Open Sans", "Helvetica Neue", sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      height: 3rem;
+      padding: 0 2rem;
+      text-align: center;
+      text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+      transition: all 0.5s;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+
+      /* Add the following line to center text vertically: */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transform: scale(1);
+      transition: transform 0.1s ease;
+    }
+
+    .button-36:active {
+      transform: scale(0.9);
+    }
+    .button-36:hover {
+      box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
+      transition-duration: 0.1s;
+    }
+
+    @media (min-width: 768px) {
+      .button-36 {
+        padding: 0 2.6rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .button-36 {
+        font-size: 12px;
+        padding: 0 1rem;
+        height: 2rem;
+      }
+    }
+
+    #load {
+      height: 2.5rem;
+    }
+
+    #download {
+      height: 2.5rem;
+      background-image: linear-gradient(
+        92.88deg,
+        #52b545 9.16%,
+        #43cc4e 43.89%,
+        #42d73f 64.72%
+      );
+    }
+
+    #download:hover {
+      box-shadow: rgba(77, 205, 63, 0.5) 0 1px 30px;
+      transition-duration: 0.1s;
+    }
+
+    #clear-button {
+      height: 2.5rem;
+      background-image: linear-gradient(
+        92.88deg,
+        #b54545 9.16%,
+        #cc4343 43.89%,
+        #d73f3f 64.72%
+      );
+    }
+
+    #clear-button:hover {
+      box-shadow: rgba(205, 63, 63, 0.5) 0 1px 30px;
+      transition-duration: 0.1s;
+    }
+
+    .customfile {
+     
+      border: 2px solid rgb(76, 215, 234);
+      border-radius: 50px;
+      padding: 2px;
+      font-size: 20px;
+      /* font-size was incorrect previously */
+      background-image: radial-gradient(circle, #553c9a, #ee4b2b);
+      font-family: "sans-serif";
+      margin: auto;
+      /* auto margins are applied */
+      display: block;
+      max-width: max-content;
+      /* set to block for auto margins to work */
+    }
+
+    .customfile::-webkit-file-upload-button {
+      font-family: "sans-serif";
+      background-color: rgb(227, 221, 221);
+      color: #ffffff;
+      padding: 5px 16px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      color: black;
+    }
+
+    #upload-csv {
+    
+      margin: auto;
+      /* auto margins are applied */
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 30px;
+      height: 2rem;
+      background-image: linear-gradient(
+        92.88deg,
+        #b5b145 9.16%,
+        #cacc43 43.89%,
+        #d4d73f 64.72%
+      );
+    }
+
+    #upload-csv:hover {
+      box-shadow: rgba(198, 205, 63, 0.5) 0 1px 30px;
+      transition-duration: 0.1s;
+    }
+
+    #results {
+      margin: auto;
+      /* auto margins are applied */
+    }
+
+    @keyframes slideDown {
+      0% {
+        transform: translateY(-100%);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+  </style>
+
+  <head>
+    <title>Display CSV</title>
+  </head>
+
+  <body>
+    <nav class="buttons-container">
+      <a class="button-36" href="/">Home</a>
+      <a class="button-36" href="/csv/">CSV</a>
+      <a class="button-36" href="/overlap/">Duplicates</a>
+      <a class="button-36" href="/map/">Map</a>
+      <a class="button-36" href="/plots/">Plot</a>
+      <a class="button-36" href="/about/">About</a>
+    </nav>
+
+    <header>
+      <h1>Display CSV</h1>
+    </header>
+
+    <div class="buttons-container">
+      <button class="button-36" id="load">Load Results</button>
+      <button class="button-36" id="download">Download CSV</button>
+      <button class="button-36" id="clear-button">Clear Results</button>
+    </div>
+    <!-- New download button -->
+
+    <input class="customfile" type="file" id="csv-upload" />
+    <button class="button-36" id="upload-csv">Upload CSV</button>
+
+    <table id="results"></table>
+
+    <script>
+      const resultsTable = document.getElementById("results");
+
+      document.getElementById("load").addEventListener("click", () => {
+        fetch("/get_results")
+          .then((response) => response.text())
+          .then((data) => {
+            const rows = data.split("\n");
+            resultsTable.style.border = "1px solid";
+
+            resultsTable.innerHTML = "";
+
+            rows.forEach((row) => {
+              const cols = row.split(",");
+
+              let tr = document.createElement("tr");
+
+              cols.forEach((col) => {
+                let td = document.createElement("td");
+                td.textContent = col;
+                tr.appendChild(td);
+              });
+
+              resultsTable.appendChild(tr);
+            });
+          });
+      });
+
+      // Event listener for the download button
+      document.getElementById("download").addEventListener("click", () => {
+        window.location.href = "/download_results";
+      });
+
+      const uploadButton = document.getElementById("upload-csv");
+
+      uploadButton.addEventListener("click", () => {
+        const csvFile = document.getElementById("csv-upload").files[0];
+
+        const formData = new FormData();
+        formData.append("csv", csvFile);
+
+        fetch("/upload_csv", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            // Handle response
+          })
+          .catch((error) => {
+            // Handle error
+          });
+      });
+
+      const clearButton = document.getElementById("clear-button");
+
+      // Add click handler
+      clearButton.addEventListener("click", () => {
+        fetch("/clear_results")
+          .then((response) => {
+            // Handle response
+          })
+          .catch((error) => {
+            // Handle error
+          });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>About</title>
+  <style>
+    header h1 {
+
+      font-size: 65px;
+      font-weight: 600;
+      background-image: conic-gradient(#f1eef0, #928c8c, #f0ecec);
+      color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text;
+      text-align: center;
+    }
+
+    body {
+      color: white;
+      width: 100vw;
+      height: 100vh;
+      text-shadow: 8px 8px 10px #0000008c;
+      background-color: #343a40;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%239C92AC' fill-opacity='0.25' fill-rule='nonzero'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+        linear-gradient(to right top,
+          #151314,
+          #151314,
+          #151314,
+          #151314,
+          #151314);
+    }
+
+    .buttons-container {
+ 
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      /* This is to add some space between the buttons. */
+    }
+
+    .button-36 {
+      /* existing styles here... */
+      background-image: linear-gradient(92.88deg,
+          #455eb5 9.16%,
+          #5643cc 43.89%,
+          #673fd7 64.72%);
+      border-radius: 8px;
+      border-style: none;
+      box-sizing: border-box;
+      color: #ffffff;
+      cursor: pointer;
+      flex-shrink: 0;
+      font-family: "Inter UI", "SF Pro Display", -apple-system,
+        BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+        "Open Sans", "Helvetica Neue", sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      height: 3rem;
+      padding: 0 2rem;
+      text-align: center;
+      text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+      transition: all 0.5s;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+
+      /* Add the following line to center text vertically: */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transform: scale(1);
+      transition: transform 0.1s ease;
+    }
+    .button-36:active {
+      transform: scale(0.9);
+    
+    }
+
+    .button-36:hover {
+      box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
+      transition-duration: 0.1s;
+    }
+
+    @media (min-width: 768px) {
+      .button-36 {
+        padding: 0 2.6rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .button-36 {
+        font-size: 12px;
+        padding: 0 1rem;
+        height: 2rem;
+      }
+    }
+
+    @keyframes slideDown {
+      0% {
+        transform: translateY(-100%);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    .video-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="buttons-container">
+    <a class="button-36" href="/">Home</a>
+    <a class="button-36" href="/csv/">CSV</a>
+    <a class="button-36" href="/overlap/">Duplicates</a>
+    <a class="button-36" href="/map/">Map</a>
+    <a class="button-36" href="/plots/">Plot</a>
+    <a class="button-36" href="/about/">About</a>
+  </nav>
+  <header>
+    <h1>About</h1>
+  </header>
+  <div style="padding: 2rem; line-height: 1.6; font-size: 17px;">
+    <p>Welcome to our Trash Annotation Application, an innovative web tool designed to streamline coastal cleanup.</p>
+
+    <p>Before you proceed with the application, it's important to clarify a few key parameters:</p>
+
+    <ol>
+      <li><strong>Drone Specifications:</strong> The Trash Annotation Application is specifically designed to analyze
+        imagery from the Phantom Pro 4 aerial drone. The app’s algorithm capitalizes on the unique focal length and
+        sensor width parameters of this particular drone. If you utilize a different drone model, please ensure you
+        adjust these parameters accordingly by sourcing the required information online and inputting it in the space
+        provided below.</li>
+
+      <li><strong>Image Metadata:</strong> For the app to work, the images captured by the drone should contain
+        metadata that includes information on longitude, latitude, and altitude. \.</li>
+    </ol>
+
+    <h2>Application Tutorial</h2>
+
+    <p>To ensure smooth navigation through the app, it's essential to note that upon clicking to a new tab, the page
+      content resets. Rest assured, all changes made are automatically saved.</p>
+
+    <ol>
+      <li>Begin by uploading images to the application in the Home tab. After clicking 'Submit', allow the system 
+        to load. Once
+        completed, you're able to review and edit the results as necessary. Just remember to save the results by
+        clicking "Revise"</li>
+
+      <li>Navigate to the 'CSV' tab to review your results. The 'Load Results' button will display all current
+        detections. If the results look good, use the 'Download CSV' button to secure a copy for future use.
+        The 'Clear Results' button allows you to remove all current results, while 'Upload CSV' enables you to
+        incorporate results from a previous session.</li>
+
+      <li>On the Overlap page, duplicated trash detections, resulting from the same piece of trash appearing in multiple
+        images, can be
+        eliminated. Simply re-upload the images from Step 1.</li>
+
+      <li>Once you've completed the above, proceed to the 'Map' tab. Here, you'll find a geographical representation of
+        the detected trash. Note, if the system is required to process a large quantity of trash, it may take some time
+        to load. In this instance, opt for the 'Faster Reload' option.</li>
+
+      <li>The 'Plot' tab offers an opportunity to generate a bar graph illustrating the distribution of trash types in
+        differemt areas. Input the number of trash clusters or areas you've identified and allow the script to run.
+        If clusters are located in close proximity to each other, consider them as a single cluster.</li>
+    </ol>
+
+    <p>We thank you for utilizing our Trash Annotation Application! Below is a video tutorial that might help!</p>
+  </div>
+  <div class="video-container">
+    <iframe width="80%" height="650" controls
+      src="https://www.youtube.com/embed/D_hD4nMwO6U">
+    </iframe>
+  </div>
+
+</body>
+
+</html>
+
+
+</body>
+
+</html>
