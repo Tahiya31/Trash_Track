@@ -103,9 +103,9 @@ Docker Image: 🐋
 ```
 This is easily achieved through [Paperspace](https://www.paperspace.com). Make an account, create a project, then create a Deployment. 
 
-In the deployment menu, select one of the GPUs as your machine type. Have Image be `rayw03/trash-app` and port be `8000`. Click `Deploy` and you're done! 
+In the deployment menu, select one of the GPUs as your machine type. For Image, select Public container register, and have the Image be `rayw03/trash-app` and port be `8000`. Click `Deploy` and you're done! 
 
-If you want to shut it down, change Enabled from `True` to `False`.  
+Paperspace charges by the hour, so remember to shut it down when you're not using it!
 
 
 
