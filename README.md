@@ -14,6 +14,8 @@ coordination, collection, and removal efforts. In this web app, we created a pip
 
 For more information, refer to our paper which will be available soon.
 
+### Press Highlights[https://colbyecho.news/2024/04/19/ai-on-the-island/]
+
 
 ## Paper 📄
 Raymond Wang, Tahiya Chowdhury, Nicholas R. Record, and D. Whitney King. 2018. Designing A Sustainable Marine Debris Clean-up Framework without Human Labels. In Proceedings of ACM SIGCAS/SIGCHI
