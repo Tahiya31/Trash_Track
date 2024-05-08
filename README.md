@@ -12,7 +12,7 @@ coordination, collection, and removal efforts. In this web app, we created a pip
 * 🗺️ Trash Visualization: [Folium Library](https://python-visualization.github.io/folium/)
 * 🌐 Web App: HTML, CSS, Javascript, Flask 
 
-For more information, refer to [Presentation](https://docs.google.com/presentation/d/1rI7PSf180x29OTPDD2gRQmT9HyvPoCecKxQgDgZoxtc/edit?usp=sharing). Paper is coming soon! 
+For more information, refer to our paper which will be available soon.
 
 
 ## Paper 📄
