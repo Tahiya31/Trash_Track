@@ -1,7 +1,8 @@
 
-# Colby Trash Deletion App 🗑️ 
+# Sustainable Marine Debris Clean-Up App 🗑️ 
 
-Marine debris presents substantial ecological challenge to the ecosystem of Maine's islands where volunteer groups annually undertake cleanup initiatives on islands. These cleanup efforts hindered by unpredictable challenges in trash volume and placement. In this web app, we created a pipeline that leverages aerial drones and machine learning to automatically detect, classify, and map marine trash.
+Marine debris presents substantial ecological challenge to the ecosystem of coastal islands where volunteer groups annually undertake cleanup initiatives on islands. These cleanup efforts hindered by unpredictable challenges in trash volume and position that requires monitoring,
+coordination, collection, and removal efforts. In this web app, we created a pipeline that leverages aerial drones and machine learning to automatically detect, classify, and map marine trash.
 
 ## Project overview 🔎
 * 🗃️ Dataset: Drone footage from Tim Stonesifer & Dr. Whitney King
@@ -15,14 +16,19 @@ For more information, refer to [Presentation](https://docs.google.com/presentati
 
 
 ## Paper 📄
-Still working on it ⚙️
+Raymond Wang, Tahiya Chowdhury, Nicholas R. Record, and D. Whitney King. 2018. Designing A Sustainable Marine Debris Clean-up Framework without Human Labels. In Proceedings of ACM SIGCAS/SIGCHI
+Conference on Computing and Sustainable Societies (ACM COMPASS ’24), ACM, New York, NY, USA.
 
+### Abstract
+
+Marine debris poses a significant ecological threat to birds, fish, andother animal life. Traditional methods for assessing debris accumulation involve labor-intensive and costly manual surveys. This study introduces a framework that utilizes aerial imagery captured
+by drones to conduct remote trash surveys. Leveraging computer vision techniques, our approach detects, classifies, and maps marine debris distributions. The framework uses Grounding DINO, a transformer-based zero-shot object detector, and CLIP, a vision-language model for zero-shot object classification, enabling the detection and classification of debris objects based on material type without the need for training labels. To mitigate over-counting due to different views of the same object, Scale-Invariant Feature Transform (SIFT) is employed for duplicate matching using local object features. Additionally, we have developed a user-friendly web application that facilitates end-to-end analysis of drone images, including object detection, classification, and visualization on a map to support cleanup efforts. Our method achieves competitive performance in detection (0.69 mean IoU) and classification (0.74 F1 score) across seven debris object classes without labeled data, comparable to state-of-the-art supervised methods. This framework has the potential to streamline automated trash sampling surveys, fostering efficient and sustainable community-led cleanup initiatives.
 
 ## Demo 
 
 https://github.com/RayWang0328/Colby-Trash-App/assets/19866871/f9c72a17-f664-4ac9-9043-45be41a96a5e
 
-## Local Instillation 🛠️ 
+## Local Installation 🛠️ 
 
 ### 0. CPU or GPU
 It is advisable to run this program on your local machine only if you have a GPU that is CUDA compatible. The reason for this is because the models used in this app are pretty heavy, computationally. 
