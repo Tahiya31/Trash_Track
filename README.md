@@ -18,7 +18,7 @@ For more information, refer to our paper which will be available soon.
 
 
 ## Paper 📄
-Raymond Wang, Tahiya Chowdhury, Nicholas R. Record, and D. Whitney King. 2018. Designing A Sustainable Marine Debris Clean-up Framework without Human Labels. In Proceedings of ACM SIGCAS/SIGCHI
+Raymond Wang, Nicholas R. Record, D. Whitney King, and Tahiya Chowdhury. 2018. Designing A Sustainable Marine Debris Clean-up Framework without Human Labels. In Proceedings of ACM SIGCAS/SIGCHI
 Conference on Computing and Sustainable Societies (ACM COMPASS ’24), ACM, New York, NY, USA.
 
 ### Abstract
