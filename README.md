@@ -21,6 +21,8 @@ For more information, refer to our paper which will be available soon.
 Raymond Wang, Nicholas R. Record, D. Whitney King, and Tahiya Chowdhury. 2024. Designing A Sustainable Marine Debris Clean-up Framework without Human Labels. In Proceedings of ACM SIGCAS/SIGCHI
 Conference on Computing and Sustainable Societies (ACM COMPASS ’24), ACM, New York, NY, USA.
 
+Preprint available at: https://arxiv.org/pdf/2405.14815
+
 ### Abstract
 
 Marine debris poses a significant ecological threat to birds, fish, andother animal life. Traditional methods for assessing debris accumulation involve labor-intensive and costly manual surveys. This study introduces a framework that utilizes aerial imagery captured
