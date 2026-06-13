@@ -33,11 +33,11 @@ def mapping(fast,skip=False):
 
     for index, row1 in df.iterrows():
 
-            long, lat = float(row1[4]), float(row1[5])
-            alt = float(row1[6])
+            long, lat = float(row1['longitude']), float(row1['latitude'])
+            alt = float(row1['altitude'])
             gsd = calculate_GSD(alt, 13.2 ,8.8 , 5472)
-            bbox_pixels = [float(row1[0]),float(row1[1]),float(row1[2]),float(row1[3])]
-            predictions.append(row1[9])
+            bbox_pixels = [float(row1['x1']),float(row1['y1']),float(row1['x2']),float(row1['y2'])]
+            predictions.append(row1['type'])
 
 
             transformer = Transformer.from_crs("EPSG:3857", "EPSG:4326", always_xy=True)

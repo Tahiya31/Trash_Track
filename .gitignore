@@ -1,2 +1,6 @@
-
-.DS_Store
+.venv/
+GroundingDINO/
+weights/
+__pycache__/
+*.pyc
+detections.csv

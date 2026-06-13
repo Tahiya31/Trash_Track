@@ -21,6 +21,7 @@ from routes.remove_overlap import remove_overlap
 from routes.mapping import mapping, show_map
 from routes.plots import plots 
 from python.config import application as app
+import python.config
 
 from GroundingDINO.groundingdino.util.inference import Model
 
@@ -45,13 +46,13 @@ processor = CLIPProcessor.from_pretrained("openai/clip-vit-large-patch14")
 
 
 # app = Flask(__name__)
+column_titles = ['x1','y1','x2','y2','longitude','latitude','altitude','image_name','number','type']
 try:
-    df = pd.read_csv('detections.csv')  
-except pd.errors.EmptyDataError:
-    df = pd.DataFrame()
-
-import python.config
-python.config.csv_file = df
+    df = pd.read_csv('detections.csv')
+    if df.empty and len(df.columns) == 0:
+        df = pd.DataFrame(columns=column_titles)
+except (pd.errors.EmptyDataError, FileNotFoundError):
+    df = pd.DataFrame(columns=column_titles)
 
 
 
@@ -123,7 +124,7 @@ def process_images():
     try:
         df = pd.read_csv('detections.csv')  
     except pd.errors.EmptyDataError:
-        df = pd.DataFrame(column_titles)
+        df = pd.DataFrame(columns=column_titles)
 
     python.config.csv_file = df
     
@@ -208,16 +209,16 @@ def process_images():
 
                     df.loc[len(df)] = custom_values  
                 
-                    with open(csv_file_path, 'a', newline='') as file:
-                        writer = csv.writer(file)
+                    with open(csv_file_path, 'a', newline='') as f_out:
+                        writer = csv.writer(f_out)
                         writer.writerow(custom_values)
 
                     total.append(custom_values)
             else: 
                 custom_values = ["NA", "NA", "NA","NA", lon, lat, alt, image_name, "NA", "NA"]
                 df.loc[len(df)] = custom_values
-                with open(csv_file_path, 'a', newline='') as file:
-                    writer = csv.writer(file)
+                with open(csv_file_path, 'a', newline='') as f_out:
+                    writer = csv.writer(f_out)
                     writer.writerow(custom_values)
 
 
@@ -226,16 +227,16 @@ def process_images():
             im = Image.open(io.BytesIO(filestr))
             for index, row in df.iterrows():
                 if image_name in str(row['image_name']):
-                    if math.isnan(row[0]):
+                    if math.isnan(row['x1']):
                        break
-                    img_np = np.array(im.crop((row[0],row[1],row[2],row[3])))
+                    img_np = np.array(im.crop((row['x1'],row['y1'],row['x2'],row['y2'])))
                     output_image = Image.fromarray(img_np.astype('uint8'))
                     buffered = BytesIO()
                     output_image.save(buffered, format="PNG")
                     img_str = base64.b64encode(buffered.getvalue())
                     img_str = img_str.decode('utf-8')
                     crops.append(img_str)
-                    total.append([str(row[0]),str(row[1]),str(row[2]),str(row[3]),str(row[4]),str(row[5]),str(row[6]), str(row[7]),str(row[8]),str(row[9])])
+                    total.append([str(row['x1']),str(row['y1']),str(row['x2']),str(row['y2']),str(row['longitude']),str(row['latitude']),str(row['altitude']),str(row['image_name']),str(row['number']),str(row['type'])])
                
     df.to_csv('detections.csv', index=False, mode='w') 
     python.config.csv_file = df
@@ -246,7 +247,7 @@ def process_images():
 @app.route('/clear_results')
 def clear_results():
 
-  python.config.csv_file = pd.DataFrame()
+  python.config.csv_file = pd.DataFrame(columns=column_titles)
   
   
   with open('detections.csv', 'w') as f:  

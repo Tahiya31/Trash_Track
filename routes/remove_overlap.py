@@ -83,15 +83,15 @@ def remove_overlap():
 
         for index, row in df.iterrows():
             if name in str(row['image_name']):
-                if row[0] != "x1":
+                if row['x1'] != "x1":
                     image_names.append(name)
-                    image_numbers.append(row[8])
-                    img_np = np.array(im.crop((float(row[0]),float(row[1]),float(row[2]),float(row[3]))))
+                    image_numbers.append(row['number'])
+                    img_np = np.array(im.crop((float(row['x1']),float(row['y1']),float(row['x2']),float(row['y2']))))
                     image_crop.append(img_np)
                     kp, des = sift.detectAndCompute(img_np, None)
                     image_kp_and_des.append((kp, des))
-                    longitudes.append(row[4])
-                    latitudes.append(row[5])
+                    longitudes.append(row['longitude'])
+                    latitudes.append(row['latitude'])
 
 
     tree = KDTree(list(zip(longitudes, latitudes)))
