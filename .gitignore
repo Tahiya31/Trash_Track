@@ -4,3 +4,7 @@ weights/
 __pycache__/
 *.pyc
 detections.csv
+
+.DS_Store
+eval_images/
+annotations_2023_23_01.csv

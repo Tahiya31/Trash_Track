@@ -1,202 +1,247 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Trash Annotation App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    #submit-button {
-     
-      margin: auto;
-
-      display: block;
-      margin-top: 10px;
-      margin-bottom: 30px;
-      height: 2rem;
+    :root {
+      --deep: #04161f;          /* abyss background */
+      --teal: #16c2b3;          /* tidal teal (brighter for dark) */
+      --teal-bright: #2ee0cf;   /* shallow water */
+      --kelp: #3fbf78;          /* kelp green */
+      --kelp-bright: #5fe39a;
+      --sand: #061f2a;          /* page background (deep ocean) */
+      --surface: #0c2c38;       /* card surface */
+      --ink: #eaf6f5;           /* primary text */
+      --muted: #8fb3bb;         /* secondary text */
+      --line: #18424f;          /* hairline borders */
+      --shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 14px 40px rgba(0, 0, 0, 0.5);
+      --radius: 14px;
     }
 
-    .customfile {
-    
-      border: 2px solid rgb(76, 215, 234);
-      border-radius: 50px;
-      padding: 2px;
-      font-size: 20px;
-     
-      background-image: radial-gradient(circle, #553c9a, #ee4b2b);
-      font-family: "sans-serif";
-      margin: auto;
-  
-      display: block;
-      max-width: max-content;
-   
-    }
-
-    .customfile::-webkit-file-upload-button {
-      font-family: "sans-serif";
-      background-color: rgb(227, 221, 221);
-      color: #ffffff;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      color: black;
-    }
+    * { box-sizing: border-box; }
 
     body {
-      color: white;
-      width: 100vw;
-      height: 100vh;
-      text-shadow: 8px 8px 10px #0000008c;
-      background-color: #343a40;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%239C92AC' fill-opacity='0.25' fill-rule='nonzero'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
-        linear-gradient(to right top,
-          #151314,
-          #151314,
-          #151314,
-          #151314,
-          #151314);
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 560px at 100% -10%, rgba(22, 194, 179, 0.16), transparent 60%),
+        radial-gradient(900px 520px at -10% 110%, rgba(63, 191, 120, 0.14), transparent 55%),
+        var(--sand);
     }
 
-    header h1 {
-   
-      font-size: 65px;
-      font-weight: 600;
-      background-image: conic-gradient(#c7ed3d 0%,
-          #c2ccbb 33%,
-          #ee4b2b 33%,
-          #ee4b2b 66%,
-          #00c2cb 66%,
-          #00c2cb 99%);
-      color: transparent;
-      background-clip: text;
-      -webkit-background-clip: text;
-      text-align: center;
-    }
-
+    /* ---------- Nav ---------- */
     .buttons-container {
-     
       display: flex;
       justify-content: center;
-      gap: 20px;
+      gap: 8px;
       flex-wrap: wrap;
-   
+      padding: 18px 16px;
+      background: rgba(6, 31, 42, 0.72);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
 
     .button-36 {
-     
-      background-image: linear-gradient(92.88deg,
-          #455eb5 9.16%,
-          #5643cc 43.89%,
-          #673fd7 64.72%);
-      border-radius: 8px;
-      border-style: none;
-      box-sizing: border-box;
-      color: #ffffff;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      color: var(--muted);
       cursor: pointer;
-      flex-shrink: 0;
-      font-family: "Inter UI", "SF Pro Display", -apple-system,
-        BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
-        "Open Sans", "Helvetica Neue", sans-serif;
-      font-size: 16px;
-      font-weight: 500;
-      height: 3rem;
-      padding: 0 2rem;
-      text-align: center;
-      text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
-      transition: all 0.5s;
-      user-select: none;
-      -webkit-user-select: none;
-      touch-action: manipulation;
-
-    
-      display: flex;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      height: 2.6rem;
+      padding: 0 1.15rem;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
-      transform: scale(1);
-      transition: transform 0.1s ease;
+      transition: background 0.18s ease, color 0.18s ease, transform 0.08s ease, box-shadow 0.18s ease;
     }
-    .button-36:active {
-      transform: scale(0.9);
-    }
-
     .button-36:hover {
-      box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
-      transition-duration: 0.1s;
+      color: var(--deep);
+      background: rgba(15, 138, 138, 0.09);
+    }
+    .button-36:active { transform: scale(0.96); }
+    .button-36:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+    /* primary action buttons (submit / revise) get filled treatment */
+    #submit-button, #finalize {
+      background-image: linear-gradient(120deg, var(--teal) 0%, var(--kelp) 100%);
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+    #submit-button:hover, #finalize:hover {
+      color: #fff;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-1px);
     }
 
-    @media (min-width: 768px) {
-      .button-36 {
-        padding: 0 2.6rem;
-      }
+    /* ---------- Header ---------- */
+    header { text-align: center; padding: 48px 20px 8px; }
+    header h1 {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(34px, 6vw, 58px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0;
+      background-image: linear-gradient(100deg, var(--deep), var(--teal-bright) 55%, var(--kelp-bright));
+      color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 17px;
+      margin: 12px auto 0;
+      max-width: 540px;
+      line-height: 1.5;
     }
 
-    @media (max-width: 600px) {
-      .button-36 {
-        font-size: 12px;
-        padding: 0 1rem;
-        height: 2rem;
-      }
+    /* ---------- Upload card ---------- */
+    .panel {
+      max-width: 680px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+    }
+    .upload-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      text-align: center;
+    }
+    .dropzone {
+      border: 2px dashed #2a5663;
+      border-radius: var(--radius);
+      padding: 36px 20px;
+      transition: border-color 0.2s ease, background 0.2s ease;
+      cursor: pointer;
+    }
+    .dropzone.dragover {
+      border-color: var(--teal);
+      background: rgba(21, 179, 166, 0.06);
+    }
+    .dropzone-icon {
+      width: 52px; height: 52px;
+      margin: 0 auto 14px;
+      color: var(--teal);
+    }
+    .dropzone-text { font-weight: 600; font-size: 17px; margin-bottom: 4px; }
+    .dropzone-hint { color: var(--muted); font-size: 14px; }
+    .file-count {
+      margin-top: 14px; font-size: 14px; font-weight: 600; color: var(--teal);
+      min-height: 18px;
     }
 
+    /* keep the original input id but visually hide it; dropzone triggers it */
+    .customfile {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); border: 0;
+    }
+
+    #submit-button {
+      margin: 22px auto 0;
+      display: inline-flex;
+      height: 3rem;
+      padding: 0 2.4rem;
+      font-size: 16px;
+      border-radius: 10px;
+    }
+
+    /* ---------- Loader ---------- */
     .loader {
-      border: 16px solid #f3f3f3;
-  
-      border-top: 16px solid #3498db;
- 
+      border: 5px solid rgba(15, 138, 138, 0.15);
+      border-top: 5px solid var(--teal);
       border-radius: 50%;
-      width: 120px;
-      height: 120px;
-      animation: spin 2s linear infinite;
+      width: 54px; height: 54px;
+      animation: spin 0.9s linear infinite;
       display: none;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 20px;
-      margin-bottom: 10px;
-    
+      margin: 30px auto 10px;
     }
-
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
+    @keyframes spin { to { transform: rotate(360deg); } }
     .loading-status {
-      text-align: center;
-      font-size: 30px;
+      text-align: center; font-size: 16px; color: var(--muted); font-weight: 500;
     }
 
+    /* ---------- Results ---------- */
+    #results {
+      max-width: 1000px;
+      margin: 8px auto 60px;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 18px;
+    }
+    .result-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .result-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .result-card img {
+      width: 100%;
+      max-width: 180px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #08242e;
+    }
+    .result-coords {
+      font-size: 12px; color: var(--muted);
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      text-align: center; word-break: break-word;
+    }
     #drop-down {
-      margin: auto;
-      height: 2rem;
-      width: 13rem;
+      height: 2.5rem;
+      width: 100%;
+      max-width: 180px;
+      border-radius: 9px;
+      border: 1px solid var(--line);
+      background: #08242e;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 0 10px;
+      cursor: pointer;
     }
-
-    .drop-down-content {
-      color: black;
-      text-align: center;
-      border-bottom: 1px solid black;
-    }
-
+    #drop-down:focus-visible { outline: 2px solid var(--teal); outline-offset: 1px; }
+    .drop-down-content { color: #0c2a36; }
     #finalize {
-      margin: auto;
-      height: 2rem;
-      width: 7rem;
-      margin-left: 2px;
+      height: 2.5rem;
+      width: 100%;
+      max-width: 180px;
+      border-radius: 9px;
+      font-size: 14px;
+    }
+    .result-actions {
+      display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: center;
     }
 
-    @keyframes slideDown {
-      0% {
-        transform: translateY(-100%);
-      }
-
-      100% {
-        transform: translateY(0);
-      }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
@@ -210,18 +255,30 @@
     <a class="button-36" href="./plots/">Plot</a>
     <a class="button-36" href="./about/">About</a>
   </nav>
+
   <header>
     <h1>Trash Annotation App</h1>
+    <p class="subtitle">Upload aerial drone imagery to automatically detect, classify, and map marine debris along the coastline.</p>
   </header>
 
-  <input class="customfile" type="file" id="image-selector" multiple />
-  <button class="button-36" id="submit-button">Submit</button>
-
-  <div style="margin: 10px 0"></div>
-
+  <div class="panel">
+    <div class="upload-card">
+      <div class="dropzone" id="dropzone">
+        <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        <div class="dropzone-text">Drop drone images here</div>
+        <div class="dropzone-hint">or click to browse &middot; JPG, multiple files supported</div>
+        <input class="customfile" type="file" id="image-selector" multiple />
+        <div class="file-count" id="file-count"></div>
+      </div>
+      <button class="button-36" id="submit-button">Detect debris</button>
+    </div>
+  </div>
 
   <div class="loader" id="loader"></div>
-
   <div class="loading-status" id="loading-status"></div>
 
   <div id="results"></div>
@@ -231,6 +288,28 @@
     const resultsDiv = document.getElementById("results");
     const loader = document.getElementById("loader");
     const loadingStatus = document.getElementById("loading-status");
+
+    // --- dropzone wiring (purely cosmetic; still uses #image-selector) ---
+    const dropzone = document.getElementById("dropzone");
+    const imageSelector = document.getElementById("image-selector");
+    const fileCount = document.getElementById("file-count");
+
+    dropzone.addEventListener("click", () => imageSelector.click());
+    imageSelector.addEventListener("change", () => updateCount());
+    ["dragenter", "dragover"].forEach(evt =>
+      dropzone.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.add("dragover"); })
+    );
+    ["dragleave", "drop"].forEach(evt =>
+      dropzone.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.remove("dragover"); })
+    );
+    dropzone.addEventListener("drop", (e) => {
+      imageSelector.files = e.dataTransfer.files;
+      updateCount();
+    });
+    function updateCount() {
+      const n = imageSelector.files.length;
+      fileCount.textContent = n ? `${n} image${n > 1 ? "s" : ""} selected` : "";
+    }
 
     submitButton
       .addEventListener("click", () => {
@@ -263,24 +342,20 @@
 
             data.predicted_classes.forEach((row, i) => {
               const div = document.createElement("div");
-              div.style.display = "grid"; 
-              div.style.gridTemplateColumns = "1fr 1fr 1fr"; 
-              div.style.alignItems = "center"; 
-              div.style.justifyItems = "center"; 
-              div.style.marginTop = "10px"; 
+              div.className = "result-card";
 
               const p = document.createElement("p");
+              p.className = "result-coords";
               p.textContent = row[0] + ", " + row[1] + ", " + row[2];
-              div.appendChild(p); 
+              div.appendChild(p);
 
               const img = document.createElement("img");
               img.src = "data:image/jpg;base64," + data.crops[i];
               img.width = 100;
-              div.appendChild(img); 
+              div.appendChild(img);
 
               const actionDiv = document.createElement("div");
-              actionDiv.style.display = "flex"; 
-              actionDiv.style.justifyContent = "center"; 
+              actionDiv.className = "result-actions";
 
               const select = document.createElement("select");
               select.className = "button-36";
@@ -314,27 +389,25 @@
                 fetch(`/update_class?index=${i}&new_class=${select.value}`)
                   .then((response) => response.json())
                   .then((data) => {
-                 
+
                   });
               });
 
-          
               actionDiv.appendChild(select);
               actionDiv.appendChild(button);
 
-              div.appendChild(actionDiv); 
+              div.appendChild(actionDiv);
 
               resultsDiv.appendChild(div);
             });
           });
 
-       
         loadingStatus.textContent = "";
       })
       .catch((error) => {
-     
+
         loader.style.display = "none";
-       
+
         loadingStatus.textContent = "";
       });
   </script>
