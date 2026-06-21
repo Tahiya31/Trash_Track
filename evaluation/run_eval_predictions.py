@@ -2,11 +2,13 @@ import os, glob, numpy as np, pandas as pd, torch
 from PIL import Image
 from transformers import CLIPProcessor, CLIPModel
 import supervision as sv
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from script import delete_big, delete_rock, delete_overlap, delete_box, get_lat_lon, get_altitude, get_exif
 from GroundingDINO.groundingdino.util.inference import Model
 
 # ---- config ----
-IMAGE_DIR = "eval_images"          # folder with your 35 test images
+IMAGE_DIR = "eval_images"          
 OUTPUT_CSV = "detections.csv"
 RESIZE_LONG_SIDE = None            # set to None to disable resizing (slower, full accuracy)
 # -----------------
@@ -49,7 +51,7 @@ for path in sorted(glob.glob(os.path.join(IMAGE_DIR, "*.JPG"))):
     except: lon = lat = alt = "NA"
 
     for i in range(len(det.xyxy)):
-        box = det.xyxy[i] / scale          # <-- scale boxes BACK to full resolution
+        box = det.xyxy[i] / scale          # scale boxes BACK to full resolution
         crop = np.array(pil.crop(box))     # crop from ORIGINAL image
         rows.append([box[0], box[1], box[2], box[3], lon, lat, alt, name, i, classify(crop)])
     print(f"done {name}: {len(det.xyxy)} objects")

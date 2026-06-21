@@ -1,43 +1,4 @@
-"""
-evaluate.py — Evaluate the marine-debris pipeline against human-labeled ground truth.
 
-Computes:
-  - Mean IoU  (detection quality — how well predicted boxes overlap ground-truth boxes)
-  - F1 / precision / recall  (classification quality — for matched boxes, is the class right?)
-  - Per-class breakdown + confusion matrix (where does the model confuse classes?)
-
-USAGE:
-    python evaluate.py
-    python evaluate.py --pred detections.csv --gt annotations_2023_23_01.csv
-    python evaluate.py --iou-threshold 0.5 --include-nontrash
-
-The script ONLY evaluates images that appear in BOTH files, so you can run the model
-on any subset and it will score exactly that subset.
-
-----------------------------------------------------------------------------------------
-KEY DESIGN DECISIONS (read these — they affect the numbers):
-
-1. BOX FORMAT CONVERSION
-   Ground truth is stored as (x, y, width, height) [top-left corner + size].
-   Predictions are stored as (x1, y1, x2, y2) [two corners].
-   We convert GT to (x1,y1,x2,y2) via x2 = x+width, y2 = y+height before any IoU.
-
-2. LABEL MAPPING (ground-truth label -> model class)
-   The annotation vocabulary and the model's CLIP classes differ. We map them below.
-   EDIT THIS DICT once Tahiya confirms the intended correspondence.
-
-3. NON-TRASH HANDLING
-   666 of ~994 annotated images contain ONLY 'non-trash' (rocks/background). The model's
-   detection step is *designed* to filter these out (delete_rock). By default we EXCLUDE
-   non-trash ground-truth boxes from scoring, because penalizing the model for correctly
-   ignoring rocks would understate real performance. Toggle with --include-nontrash.
-   This is a genuine evaluation-design choice worth discussing with Tahiya.
-
-4. MATCHING
-   For each image, every ground-truth box is matched to the predicted box with the highest
-   IoU. A match counts as a true positive for classification only if IoU >= --iou-threshold.
-----------------------------------------------------------------------------------------
-"""
 
 import argparse
 import sys
@@ -53,9 +14,9 @@ LABEL_MAP = {
     "plastic":   "plastic",
     "metal":     "metal",
     "wood":      "wood",
-    "trap":      "cage",     # paper states cage == lobster traps
-    "others":    None,       # ambiguous catch-all; excluded from F1 by default
-    "non-trash": None,       # background/rocks; detection is built to filter these
+    "trap":      "cage",     
+    "others":    None,       
+    "non-trash": None,       
 }
 
 # The model's full class vocabulary (CLIP prompts in app.py predict_class()).
@@ -151,14 +112,14 @@ def evaluate(pred_path, gt_path, iou_threshold, include_nontrash):
                 y_true.append(mapped)
                 y_pred.append(pred_types[best_j])
 
-    # ---------- DETECTION: Mean IoU ----------
+    # DETECTION: Mean IoU 
     mean_iou = float(np.mean(all_ious)) if all_ious else 0.0
     print("\n--- DETECTION ---")
     print(f"Ground-truth objects: {n_gt}   Predicted objects: {n_pred}")
     print(f"Mean IoU (avg best-overlap per GT object): {mean_iou:.4f}")
     print(f"   (paper reported 0.69)")
 
-    # ---------- CLASSIFICATION: F1 ----------
+    # CLASSIFICATION: F1
     print("\n--- CLASSIFICATION (matched objects only) ---")
     print(f"Matched objects used for F1: {n_matched}")
     if n_matched == 0:
