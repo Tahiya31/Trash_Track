@@ -11,12 +11,13 @@
   <style>
     :root {
       --deep: #04161f;          /* abyss background */
-      --teal: #16c2b3;          /* tidal teal (brighter for dark) */
+      --teal: #16c2b3;          /* tidal teal */
       --teal-bright: #2ee0cf;   /* shallow water */
       --kelp: #3fbf78;          /* kelp green */
       --kelp-bright: #5fe39a;
-      --sand: #061f2a;          /* page background (deep ocean) */
+      --sand: #061f2a;          /* page background */
       --surface: #0c2c38;       /* card surface */
+      --surface-2: #08242e;
       --ink: #eaf6f5;           /* primary text */
       --muted: #8fb3bb;         /* secondary text */
       --line: #18424f;          /* hairline borders */
@@ -77,7 +78,6 @@
     .button-36:active { transform: scale(0.96); }
     .button-36:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
 
-    /* primary action buttons (submit / revise) get filled treatment */
     #submit-button, #finalize {
       background-image: linear-gradient(120deg, var(--teal) 0%, var(--kelp) 100%);
       color: #fff;
@@ -125,16 +125,31 @@
       text-align: center;
     }
     .dropzone {
+      position: relative;
       border: 2px dashed #2a5663;
       border-radius: var(--radius);
       padding: 36px 20px;
       transition: border-color 0.2s ease, background 0.2s ease;
       cursor: pointer;
+      overflow: hidden;
     }
     .dropzone.dragover {
       border-color: var(--teal);
       background: rgba(21, 179, 166, 0.06);
     }
+    
+    /* Native file input stretched across dropzone for iframe compatibility */
+    .customfile {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 20;
+      pointer-events: auto;
+    }
+
     .dropzone-icon {
       width: 52px; height: 52px;
       margin: 0 auto 14px;
@@ -145,14 +160,8 @@
     .file-count {
       margin-top: 14px; font-size: 14px; font-weight: 600; color: var(--teal);
       min-height: 18px;
-    }
-
-    /* keep the original input id but visually hide it; dropzone triggers it */
-    .customfile {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px; overflow: hidden;
-      clip: rect(0,0,0,0); border: 0;
+      position: relative;
+      z-index: 10;
     }
 
     #submit-button {
@@ -184,9 +193,6 @@
       max-width: 1000px;
       margin: 8px auto 60px;
       padding: 0 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 18px;
     }
     .result-card {
       background: var(--surface);
@@ -212,32 +218,6 @@
       font-size: 12px; color: var(--muted);
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
       text-align: center; word-break: break-word;
-    }
-    #drop-down {
-      height: 2.5rem;
-      width: 100%;
-      max-width: 180px;
-      border-radius: 9px;
-      border: 1px solid var(--line);
-      background: #08242e;
-      color: var(--ink);
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 0 10px;
-      cursor: pointer;
-    }
-    #drop-down:focus-visible { outline: 2px solid var(--teal); outline-offset: 1px; }
-    .drop-down-content { color: #0c2a36; }
-    #finalize {
-      height: 2.5rem;
-      width: 100%;
-      max-width: 180px;
-      border-radius: 9px;
-      font-size: 14px;
-    }
-    .result-actions {
-      display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: center;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -265,6 +245,7 @@
   <div class="panel">
     <div class="upload-card">
       <div class="dropzone" id="dropzone">
+        <input class="customfile" type="file" id="image-selector" multiple />
         <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
           <polyline points="17 8 12 3 7 8"/>
@@ -272,10 +253,20 @@
         </svg>
         <div class="dropzone-text">Drop drone images here</div>
         <div class="dropzone-hint">or click to browse &middot; JPG, multiple files supported</div>
-        <input class="customfile" type="file" id="image-selector" multiple />
         <div class="file-count" id="file-count"></div>
       </div>
-      <button class="button-36" id="submit-button">Detect debris</button>
+      
+      <!-- Cluster slider UI -->
+      <div style="margin-top: 18px; text-align: left; background: var(--surface-2); padding: 12px 16px; border-radius: 10px; border: 1px solid var(--line);">
+        <label for="cluster-count" style="font-size: 14px; font-weight: 600; color: var(--teal-bright); display: block; margin-bottom: 6px;">Number of Clusters (k)</label>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <input type="range" id="cluster-count" min="2" max="10" value="4" style="flex: 1; accent-color: var(--teal);" oninput="document.getElementById('cluster-display').innerText = this.value">
+            <span id="cluster-display" style="font-weight: bold; font-size: 16px; min-width: 20px;">4</span>
+        </div>
+        <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">Group found debris into distinct material categories dynamically.</div>
+      </div>
+
+      <button class="button-36" id="submit-button">Detect & Cluster</button>
     </div>
   </div>
 
@@ -290,128 +281,183 @@
     const loader = document.getElementById("loader");
     const loadingStatus = document.getElementById("loading-status");
 
-    // --- dropzone wiring (purely cosmetic; still uses #image-selector) ---
     const dropzone = document.getElementById("dropzone");
     const imageSelector = document.getElementById("image-selector");
     const fileCount = document.getElementById("file-count");
 
-    dropzone.addEventListener("click", () => imageSelector.click());
-    imageSelector.addEventListener("change", () => updateCount());
+    // Maintain a reliable uploadedFiles array to bypass browser input.files security restrictions
+    let uploadedFiles = [];
+
+    imageSelector.addEventListener("change", (e) => {
+      if (imageSelector.files && imageSelector.files.length > 0) {
+        uploadedFiles = Array.from(imageSelector.files);
+        console.log("Files selected via picker:", uploadedFiles.length);
+        updateCount();
+      }
+    });
+    
     ["dragenter", "dragover"].forEach(evt =>
       dropzone.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.add("dragover"); })
     );
     ["dragleave", "drop"].forEach(evt =>
       dropzone.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.remove("dragover"); })
     );
+    
     dropzone.addEventListener("drop", (e) => {
-      imageSelector.files = e.dataTransfer.files;
-      updateCount();
+      e.preventDefault();
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        uploadedFiles = Array.from(e.dataTransfer.files);
+        console.log("Files dropped:", uploadedFiles.length);
+        updateCount();
+      }
     });
+
     function updateCount() {
-      const n = imageSelector.files.length;
+      const n = uploadedFiles.length;
       fileCount.textContent = n ? `${n} image${n > 1 ? "s" : ""} selected` : "";
     }
 
-    submitButton
-      .addEventListener("click", () => {
-        const imageInput = document.getElementById("image-selector");
-        const formData = new FormData();
+    submitButton.addEventListener("click", () => {
+      const clusterCount = document.getElementById("cluster-count").value;
+      const formData = new FormData();
 
-        let totalFiles = imageInput.files.length;
-        if (totalFiles === 0) {
-          return;
-        }
+      if (uploadedFiles.length === 0) {
+        alert("Please select at least one image first.");
+        return;
+      }
 
-        // Show loader
-        loader.style.display = "block";
-        loadingStatus.textContent = `Processing ${totalFiles} Image(s)`;
+      loader.style.display = "block";
+      loadingStatus.textContent = `Processing and Clustering ${uploadedFiles.length} Image(s)...`;
 
-        for (let i = 0; i < totalFiles; i++) {
-          formData.append("img_directory", imageInput.files[i]);
-        }
+      for (let i = 0; i < uploadedFiles.length; i++) {
+        formData.append("img_directory", uploadedFiles[i]);
+      }
+      formData.append("n_clusters", clusterCount);
 
-        fetch("/process_images", {
-          method: "POST",
-          body: formData,
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            // Hide loader
-            loader.style.display = "none";
+      fetch("/process_images", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          loader.style.display = "none";
+          resultsDiv.innerHTML = ""; 
+          resultsDiv.style.display = "block";
 
-            resultsDiv.innerHTML = ""; // clear previous results
+          const groupedData = {};
+          if (data.detections) {
+            data.detections.forEach((det) => {
+              const clusterName = det.cluster_name || "Cluster 0";
+              if (!groupedData[clusterName]) groupedData[clusterName] = [];
+              groupedData[clusterName].push(det);
+            });
+          }
 
-            data.predicted_classes.forEach((row, i) => {
+          Object.keys(groupedData).sort().forEach(clusterName => {
+            const clusterItems = groupedData[clusterName];
+            
+            const headerContainer = document.createElement("div");
+            headerContainer.style.display = "flex";
+            headerContainer.style.justifyContent = "space-between";
+            headerContainer.style.alignItems = "flex-end";
+            headerContainer.style.marginTop = "36px";
+            headerContainer.style.marginBottom = "16px";
+            headerContainer.style.borderBottom = "1px solid var(--line)";
+            headerContainer.style.paddingBottom = "12px";
+
+            const clusterHeader = document.createElement("h2");
+            clusterHeader.style.color = "var(--teal-bright)";
+            clusterHeader.style.margin = "0";
+            clusterHeader.textContent = `${clusterName} (${clusterItems.length} items)`;
+            
+            const actionDiv = document.createElement("div");
+            actionDiv.style.display = "flex";
+            actionDiv.style.gap = "10px";
+
+            const select = document.createElement("select");
+            select.className = "button-36";
+            select.style.height = "2.4rem";
+            select.style.background = "var(--surface-2)";
+            
+            const classes = [
+              "Select Label...", "Plastic", "Wood", "Metal", "Fishing Gear", "Cage", "False Positive (Noise)"
+            ]; 
+            
+            classes.forEach((cls) => {
+              const option = document.createElement("option");
+              option.text = cls;
+              option.value = cls.toLowerCase();
+              select.appendChild(option);
+            });
+
+            const button = document.createElement("button");
+            button.className = "button-36";
+            button.style.height = "2.4rem";
+            button.style.background = "var(--surface)";
+            button.textContent = "Label Cluster";
+            
+            button.addEventListener("click", () => {
+              const newLabel = select.value;
+              if (newLabel === "select label...") return;
+              
+              button.textContent = "Saving...";
+              fetch(`/update_cluster_class?cluster_name=${clusterName}&new_class=${newLabel}`)
+                .then(response => response.json())
+                .then(data => {
+                    button.textContent = "Applied!";
+                    button.style.color = "var(--kelp-bright)";
+                    button.style.borderColor = "var(--kelp-bright)";
+                    clusterHeader.textContent = `${newLabel.toUpperCase()} (${clusterItems.length} items)`;
+                    
+                    if(newLabel === "false positive (noise)") {
+                        headerContainer.style.opacity = "0.4";
+                        gridDiv.style.opacity = "0.4";
+                    }
+                });
+            });
+
+            actionDiv.appendChild(select);
+            actionDiv.appendChild(button);
+            headerContainer.appendChild(clusterHeader);
+            headerContainer.appendChild(actionDiv);
+            resultsDiv.appendChild(headerContainer);
+
+            const gridDiv = document.createElement("div");
+            gridDiv.style.display = "grid";
+            gridDiv.style.gridTemplateColumns = "repeat(auto-fill, minmax(180px, 1fr))";
+            gridDiv.style.gap = "18px";
+            
+            clusterItems.forEach(item => {
               const div = document.createElement("div");
               div.className = "result-card";
+              div.style.padding = "10px";
 
               const p = document.createElement("p");
               p.className = "result-coords";
-              p.textContent = row[0] + ", " + row[1] + ", " + row[2];
+              p.textContent = item.image_name || "Debris";
+              p.style.marginBottom = "8px";
               div.appendChild(p);
 
               const img = document.createElement("img");
-              img.src = "data:image/jpg;base64," + data.crops[i];
-              img.width = 100;
+              img.src = "data:image/jpeg;base64," + item.crop_base64;
+              img.style.width = "100%";
+              img.style.maxWidth = "none";
+              img.style.aspectRatio = "1 / 1";
+              img.style.objectFit = "cover";
               div.appendChild(img);
 
-              const actionDiv = document.createElement("div");
-              actionDiv.className = "result-actions";
-
-              const select = document.createElement("select");
-              select.className = "button-36";
-              select.id = "drop-down";
-              const classes = [
-                "plastic",
-                "cage",
-                "wood",
-                "fishing gear",
-                "nature",
-                "metal",
-                "wheel",
-                "repeated trash",
-              ]; // List of classes
-              classes.forEach((cls) => {
-                const option = document.createElement("option");
-                option.text = cls;
-                option.value = cls;
-                option.className = "drop-down-content";
-                if (cls === row[2]) {
-                  option.selected = true;
-                }
-                select.appendChild(option);
-              });
-
-              const button = document.createElement("button");
-              button.className = "button-36";
-              button.id = "finalize";
-              button.textContent = "Revise";
-              button.addEventListener("click", () => {
-                fetch(`/update_class?index=${i}&new_class=${select.value}`)
-                  .then((response) => response.json())
-                  .then((data) => {
-
-                  });
-              });
-
-              actionDiv.appendChild(select);
-              actionDiv.appendChild(button);
-
-              div.appendChild(actionDiv);
-
-              resultsDiv.appendChild(div);
+              gridDiv.appendChild(div);
             });
+            
+            resultsDiv.appendChild(gridDiv);
           });
-
-        loadingStatus.textContent = "";
-      })
-      .catch((error) => {
-
-        loader.style.display = "none";
-
-        loadingStatus.textContent = "";
-      });
+        })
+        .catch(err => {
+          loader.style.display = "none";
+          loadingStatus.textContent = "Error processing images. Check server logs.";
+          console.error(err);
+        });
+    });
   </script>
 </body>
-
 </html>
